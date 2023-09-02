@@ -12,8 +12,6 @@ import org.gradle.api.tasks.Copy
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.task
-import java.io.File
-import java.util.*
 
 class MinecraftServersPlugin : Plugin<Project> {
 
@@ -28,15 +26,14 @@ class MinecraftServersPlugin : Plugin<Project> {
 
             ports("25565:25565")
 
-            val serverEnv = mutableMapOf<String, String>().apply {
+            env(buildMap {
                 this["TYPE"] = "SPIGOT"
                 this["VERSION"] = "1.20.1"
                 this["GUI"] = "FALSE"
                 this["EULA"] = "TRUE"
                 this["MEMORY"] = "2G"
                 this["USE_AIKAR_FLAGS"] = "TRUE"
-            }
-            env(serverEnv)
+            })
 
             arguments("-it") // Allow for console interactivity with 'docker attach'
         }
@@ -49,15 +46,15 @@ class MinecraftServersPlugin : Plugin<Project> {
             val libName: Property<String> = serversExtension.libName
 
             for (serverEntry in serversExtension.servers) {
-                val version = serverEntry.version.get()
-                val serverName = serverEntry.name
-                val serverPath = serverEntry.serverDir.orElse(directory.dir(serverName))
+                val version: String = serverEntry.version.get()
+                val serverName: String = serverEntry.name
+                val serverPath: String = serverEntry.serverDir.getOrElse(directory.dir(serverName)).asFile.path
 
                 val copyTask = target.task<Copy>("${serverName}_copy") {
                     dependsOn("shadowJar")
 
                     val file: RegularFile = serverEntry.libDir.getOrElse(libDir).file(serverEntry.libName.getOrElse(libName.getOrElse("${target.project.name}-${target.project.version}.jar")))
-                    println("Copy file ${file.asFile.path} to server: $serverPath/plugins")
+                    println("Copy file ${file.asFile.path} to server $serverPath/plugins")
                     from(file)
                     into("$serverPath/plugins")
                 }
