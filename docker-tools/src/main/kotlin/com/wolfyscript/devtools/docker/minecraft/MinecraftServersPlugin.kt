@@ -27,12 +27,8 @@ class MinecraftServersPlugin : Plugin<Project> {
             ports("25565:25565")
 
             env(buildMap {
-                this["TYPE"] = "SPIGOT"
-                this["VERSION"] = "1.20.1"
-                this["GUI"] = "FALSE"
-                this["EULA"] = "TRUE"
-                this["MEMORY"] = "2G"
-                this["USE_AIKAR_FLAGS"] = "TRUE"
+                this["EULA"] = "TRUE" // Enable by default. setting it to false makes no sense
+                this["USE_AIKAR_FLAGS"] = "TRUE" // Recommended, so gonna enable it by default
             })
 
             arguments("-it") // Allow for console interactivity with 'docker attach'
@@ -51,10 +47,11 @@ class MinecraftServersPlugin : Plugin<Project> {
                 val serverPath: String = serverEntry.serverDir.getOrElse(directory.dir(serverName)).asFile.path
 
                 val copyTask = target.task<Copy>("${serverName}_copy") {
+                    dependsOn(target.tasks.getByName("jar"))
                     dependsOn("shadowJar")
 
                     val file: RegularFile = serverEntry.libDir.getOrElse(libDir).file(serverEntry.libName.getOrElse(libName.getOrElse("${target.project.name}-${target.project.version}.jar")))
-                    println("Copy file ${file.asFile.path} to server $serverPath/plugins")
+                    println("Configure Copy: ${file.asFile.path} to server $serverPath/plugins")
                     from(file)
                     into("$serverPath/plugins")
                 }
