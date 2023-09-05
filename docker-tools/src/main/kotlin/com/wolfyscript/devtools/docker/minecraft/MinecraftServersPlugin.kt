@@ -75,6 +75,9 @@ class MinecraftServersPlugin : Plugin<Project> {
 
                     val customEnv = env.get().toMutableMap()
                     customEnv["VERSION"] = version
+                    if (serverEntry.type.isPresent) {
+                        customEnv["TYPE"] = serverEntry.type.get()
+                    }
                     env.set(customEnv)
 
                     val customVolumes = volumes.get().toMutableMap()
