@@ -12,5 +12,7 @@ plugins {
 rootProject.name = "dev-tools"
 
 include("docker-tools")
+include("buildtools")
 
 project(":docker-tools").projectDir = file("docker-tools")
+project(":buildtools").projectDir = file("buildtools")

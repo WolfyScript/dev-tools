@@ -3,9 +3,10 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version ("8.1.1")
     id("com.wolfyscript.devtools.java-conventions")
 }
+
+description = "docker-tools"
 
 repositories {
     mavenCentral()
@@ -14,8 +15,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     testImplementation(kotlin("test"))
-    implementation(project(":docker-tools"))
-    implementation(project(":buildtools"))
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.3")
 }
 
 tasks.test {
@@ -24,4 +24,13 @@ tasks.test {
 
 kotlin {
     jvmToolchain(17)
+}
+
+gradlePlugin {
+    plugins {
+        register("buildtools") {
+            id = "com.wolfyscript.devtools.buildtools"
+            implementationClass = "com.wolfyscript.devtools.buildtools.BuildToolsPlugin"
+        }
+    }
 }
