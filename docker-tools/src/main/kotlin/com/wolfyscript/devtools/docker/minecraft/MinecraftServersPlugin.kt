@@ -52,6 +52,7 @@ class MinecraftServersPlugin : Plugin<Project> {
                     val file: RegularFile = serverEntry.libDir.getOrElse(libDir).file(serverEntry.libName.getOrElse(libName.getOrElse("${target.project.name}-${target.project.version}.jar")))
                     println("Configure Copy: ${file.asFile.path} to server $serverPath/plugins")
                     from(file)
+                    rename(".*", "${target.project.name}.jar")
                     into("$serverPath/plugins")
                 }
 
