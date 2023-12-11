@@ -25,3 +25,18 @@ tasks.test {
 kotlin {
     jvmToolchain(17)
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("lib") {
+            from(components.getByName("java"))
+        }
+    }
+    repositories {
+        maven {
+            name = "wolfyRepo"
+            credentials(PasswordCredentials::class)
+            url = uri("https://maven.wolfyscript.com/repository/${if (project.version.toString().endsWith("-SNAPSHOT")) "snapshots" else "releases"}/")
+        }
+    }
+}
