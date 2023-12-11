@@ -42,7 +42,6 @@ class MinecraftServersPlugin : Plugin<Project> {
             val libName: Property<String> = serversExtension.libName
 
             for (serverEntry in serversExtension.servers) {
-                val version: String = serverEntry.version.get()
                 val serverName: String = serverEntry.name
                 val serverPath: String = serverEntry.serverDir.getOrElse(directory.dir(serverName)).asFile.path
 
@@ -74,9 +73,14 @@ class MinecraftServersPlugin : Plugin<Project> {
                     ports.set(serverEntry.ports.get())
 
                     val customEnv = env.get().toMutableMap()
-                    customEnv["VERSION"] = version
+                    if (serverEntry.version.isPresent) {
+                        customEnv["VERSION"] = serverEntry.version.get()
+                    }
                     if (serverEntry.type.isPresent) {
                         customEnv["TYPE"] = serverEntry.type.get()
+                    }
+                    if (serverEntry.extraEnv.isPresent) {
+                        customEnv.putAll(serverEntry.extraEnv.get())
                     }
                     env.set(customEnv)
 

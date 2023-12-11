@@ -1,26 +1,34 @@
 package com.wolfyscript.devtools.docker.minecraft
 
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.Optional
 
-interface ServerEntry {
+abstract class ServerEntry {
 
-    val name : String
+    abstract val name : String
 
-    val type : Property<String>
-
-    val version : Property<String>
-
-    val ports: SetProperty<String>
+    abstract val type : Property<String>
 
     @get:Optional
-    val serverDir: DirectoryProperty
+    abstract val version : Property<String>
+
+    abstract val ports: SetProperty<String>
 
     @get:Optional
-    val libName: Property<String>
+    abstract val serverDir: DirectoryProperty
 
     @get:Optional
-    val libDir: DirectoryProperty
+    abstract val libName: Property<String>
+
+    @get:Optional
+    abstract val libDir: DirectoryProperty
+
+    @get:Optional
+    abstract val extraEnv: MapProperty<String, String>
+
+    init {
+    }
 }
