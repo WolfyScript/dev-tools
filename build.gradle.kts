@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm") version "1.9.0"
     `java-gradle-plugin`
     `kotlin-dsl`
-    id("io.github.gradle-nexus.publish-plugin") version "2.0.0-rc-2"
+    `maven-publish`
     id("com.github.johnrengelman.shadow") version ("8.1.1")
     id("com.wolfyscript.devtools.java-conventions")
 }
@@ -26,19 +26,17 @@ kotlin {
     jvmToolchain(17)
 }
 
-nexusPublishing {
-    repositories {
-        register("wolfyRepo") {
-            nexusUrl.set(uri("https://maven.wolfyscript.com/repository/releases/"))
-            snapshotRepositoryUrl.set(uri("https://maven.wolfyscript.com/repository/snapshots/"))
-        }
-    }
-}
-
 publishing {
     publications {
         create<MavenPublication>("lib") {
             from(components.getByName("java"))
+        }
+    }
+    repositories {
+        maven {
+            name = "wolfyRepo"
+            credentials(PasswordCredentials::class)
+            url = uri("https://maven.wolfyscript.com/repository/${if (project.version.toString().endsWith("-SNAPSHOT")) "snapshots" else "releases"}/")
         }
     }
 }
