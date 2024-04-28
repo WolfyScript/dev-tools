@@ -13,6 +13,9 @@ abstract class ServerEntry {
     abstract val type : Property<String>
 
     @get:Optional
+    abstract val imageVersion: Property<String>
+
+    @get:Optional
     abstract val version : Property<String>
 
     abstract val ports: SetProperty<String>

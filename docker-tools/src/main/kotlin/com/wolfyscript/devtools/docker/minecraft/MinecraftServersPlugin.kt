@@ -74,6 +74,9 @@ class MinecraftServersPlugin : Plugin<Project> {
                     ports.set(serverEntry.ports.get())
 
                     val customEnv = env.get().toMutableMap()
+                    if (serverEntry.imageVersion.isPresent) {
+                        image.set("${image.get()}:${serverEntry.imageVersion.get()}")
+                    }
                     if (serverEntry.version.isPresent) {
                         customEnv["VERSION"] = serverEntry.version.get()
                     }
