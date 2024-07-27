@@ -1,10 +1,21 @@
 ## Dev-Tools
+### Repository
+The plugins are published to a private repository that you need to add to the plugin repositories.
+> **settings.gradle.kts** 
+> ```kotlin
+> pluginManagement {
+>     repositories {
+>         maven("https://artifacts.wolfyscript.com/artifactory/gradle-dev")
+>         // ... (other repos)
+>     }
+> }
+> ```
 
 ### Docker Run Gradle Plugin
 Inspired by docker-run module in [palantir/gradle-docker](https://github.com/palantir/gradle-docker), 
 but with a slightly different behaviour.  
 It allows you to create custom independent tasks with different configurations instead of just having a single configuration available.  
-One extension that can be used to specify default values for all custom tasks.  
+One extension that can be used to specify default values for all custom tasks.
 
 Add the plugin dependency to the `build.gradle.kts`
 ```kotlin
