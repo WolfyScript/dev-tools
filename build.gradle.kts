@@ -1,3 +1,5 @@
+import org.jfrog.gradle.plugin.artifactory.Constant.ALL_PUBLICATIONS
+
 plugins {
     kotlin("jvm") version "1.9.0"
     `java-gradle-plugin`
@@ -28,7 +30,6 @@ kotlin {
 }
 
 artifactory {
-
     publish {
         contextUrl = "https://artifacts.wolfyscript.com/artifactory"
         repository {
@@ -37,10 +38,9 @@ artifactory {
             password = project.properties["wolfyRepoPublishToken"].toString()
         }
         defaults {
-            publications("lib")
+            publications(ALL_PUBLICATIONS)
             setPublishArtifacts(true)
             setPublishPom(true)
-            isPublishBuildInfo = false
         }
     }
 }
