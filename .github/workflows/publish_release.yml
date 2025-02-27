@@ -1,5 +1,9 @@
 name: publish_release.yml
-on: release
+on:
+  workflow_dispatch: {}
+  release:
+    types:
+      - "published"
 
 jobs:
   publish-gradle:
@@ -18,7 +22,8 @@ jobs:
         uses: gradle/action/setup-gradle@v4
 
       - name: Execute Gradle build
-        run: gradle artifactoryPublish
+        run: gradle publish
         env:
           wolfyRepoPublishUsername: ${{ secrets.ARTIFACTORY_USERNAME }}
           wolfyRepoPublishToken: ${{ secrets.ARTIFACTORY_TOKEN }}
+
