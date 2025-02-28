@@ -1,0 +1,23 @@
+changelog:
+  exclude:
+    labels:
+      - skip-changelog
+    authors:
+      - octocat
+
+  categories:
+    - title: ✨ A New Era
+      labels:
+        - epoch-change
+    - title: 🚧 Breaking Changes
+      labels:
+        - breaking-change
+    - title: 🚀 New Features
+      labels:
+        - enhancement
+    - title: 🪲 Bug Fixes
+      labels:
+        - bugfix
+    - title: Other Changes
+      labels:
+        - "*"
