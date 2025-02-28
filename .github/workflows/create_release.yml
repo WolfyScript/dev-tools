@@ -1,0 +1,25 @@
+name: create_release.yml
+on:
+  push:
+    tags:
+      - "v-**"
+jobs:
+  release:
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project sources
+        uses: actions/checkout@v4
+
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          configuration: release_config.json
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: ${{steps.github_release.outputs.changelog}}

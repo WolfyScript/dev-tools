@@ -1,0 +1,55 @@
+{
+  "categories": [
+    {
+      "title": "## ✨ Next Generation Features & Changes",
+      "labels": ["epoch-change"]
+    },
+    {
+      "title": "## 🚧 Breaking Changes",
+      "labels": ["breaking-change"]
+    },
+    {
+      "title": "## 🚀 Features",
+      "labels": ["enhancement", "feat"]
+    },
+    {
+      "title": "## 🐛 Fixes",
+      "labels": ["fix","bug"]
+    },
+    {
+      "title": "## 🧪 Tests",
+      "labels": ["test"]
+    },
+    {
+      "title": "## 📦 Misc",
+      "labels": []
+    }
+  ],
+  "ignore_labels": [ "skip-changelog" ],
+  "label_extractor": [
+    {
+      "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\\([\\w\\-\\.]+\\))?(!)?: ([\\w ])+([\\s\\S]*)",
+      "target": "$1"
+    },
+    {
+      "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\\([\\w\\-\\.]+\\)){1}?(!)?: ([\\w ])+([\\s\\S]*)",
+      "target": "scope-$1"
+    },
+    {
+      "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\\([\\w\\-\\.]+\\))?!: ([\\w ])+([\\s\\S]*)",
+      "target": "breaking-change"
+    },
+    {
+      "pattern": "^BREAKING CHANGE:(.*)",
+      "target": "breaking-change"
+    },
+    {
+      "pattern": "^ignore(\\([\\w\\-\\.]+\\))?: ([\\w ])+([\\s\\S]*)",
+      "target": "skip-changelog"
+    }
+  ],
+  "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>",
+  "pr_template": "- #{{TITLE}} (##{{NUMBER}}) - #{{AUTHOR}}",
+  "commit_template": "- #{{TITLE}} ([#{{MERGE_SHA}}](${{ steps.get_repo_url.outputs.REPO_URL }}/commit/#{{MERGE_SHA}}))",
+  "empty_template": "- no changes"
+}
