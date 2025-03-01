@@ -71,6 +71,6 @@
   },
   "template": "#{{CHANGELOG}}\n\n",
   "pr_template": "- #{{TITLE}} (##{{NUMBER}}) - #{{AUTHOR}}",
-  "commit_template": "- <details><summary>#{{TITLE}}</summary>\n  ```#{{BODY}}```\n\n  → [`#{{MERGE_SHA}}`](https://github.com/WolfyScript/dev-tools/commit/#{{MERGE_SHA}})\n  </details>",
+  "commit_template": "- <details><summary>#{{TITLE}}</summary>\n\n  → [`#{{MERGE_SHA}}`](https://github.com/WolfyScript/dev-tools/commit/#{{MERGE_SHA}})\n  </details>",
   "empty_template": "- no changes"
 }
