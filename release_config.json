@@ -69,7 +69,7 @@
     "order": "ASC",
     "on_property": "mergedAt"
   },
-  "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>",
+  "template": "#{{CHANGELOG}}\n\n",
   "pr_template": "- #{{TITLE}} (##{{NUMBER}}) - #{{AUTHOR}}",
   "commit_template": "- #{{TITLE}} (#{{MERGE_SHA}})",
   "empty_template": "- no changes"
