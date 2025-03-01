@@ -16,9 +16,11 @@ jobs:
       - name: Checkout project sources
         uses: actions/checkout@v4
 
-      - name: Get Repository URL
-        id: get_repo_url
-        run: echo "REPO_URL=https://github.com/${{ github.repository }}" >> $GITHUB_OUTPUT
+      - name: Get actual Version
+        id: get_version
+        run: |
+          version=$(echo ${{github.ref_name}} | cut -d- -f2)
+          echo "::set-output name=version::$version"
 
       - name: Build Changelog
         id: github_release
@@ -32,4 +34,5 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
+          name: ${{steps.get_version.outputs.version}}
           body: ${{steps.github_release.outputs.changelog}}
