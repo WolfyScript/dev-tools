@@ -2,30 +2,44 @@
   "categories": [
     {
       "title": "## ✨ Next Generation Features & Changes",
-      "labels": ["epoch-change"]
+      "labels": [
+        "epoch-change"
+      ]
     },
     {
       "title": "## 🚧 Breaking Changes",
-      "labels": ["breaking-change"]
+      "labels": [
+        "breaking-change"
+      ]
     },
     {
       "title": "## 🚀 Features",
-      "labels": ["enhancement", "feat"]
+      "labels": [
+        "enhancement",
+        "feat"
+      ]
     },
     {
       "title": "## 🐛 Fixes",
-      "labels": ["fix","bug"]
+      "labels": [
+        "fix",
+        "bug"
+      ]
     },
     {
       "title": "## 🧪 Tests",
-      "labels": ["test"]
+      "labels": [
+        "test"
+      ]
     },
     {
       "title": "## 📦 Misc",
       "labels": []
     }
   ],
-  "ignore_labels": [ "skip-changelog" ],
+  "ignore_labels": [
+    "skip-changelog"
+  ],
   "label_extractor": [
     {
       "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\\([\\w\\-\\.]+\\))?(!)?: ([\\w ])+([\\s\\S]*)",
@@ -49,8 +63,12 @@
     }
   ],
   "tag_resolver": {
-  "method": "sort"
-},
+    "method": "sort"
+  },
+  "sort": {
+    "order": "ASC",
+    "on_property": "mergedAt"
+  },
   "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>",
   "pr_template": "- #{{TITLE}} (##{{NUMBER}}) - #{{AUTHOR}}",
   "commit_template": "- #{{TITLE}} ([#{{MERGE_SHA}}](${{ steps.get_repo_url.outputs.REPO_URL }}/commit/#{{MERGE_SHA}}))",
