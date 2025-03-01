@@ -20,7 +20,7 @@ One extension that can be used to specify default values for all custom tasks.
 Add the plugin dependency to the `build.gradle.kts`
 ```kotlin
 plugins {
-    id("com.wolfyscript.devtools.docker.run") version ("2.0-SNAPSHOT")
+    id("com.wolfyscript.devtools.docker.run") version ("a2.0.0.2")
 }
 ```
 
