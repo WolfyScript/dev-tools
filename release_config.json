@@ -71,16 +71,6 @@
   },
   "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>",
   "pr_template": "- #{{TITLE}} (##{{NUMBER}}) - #{{AUTHOR}}",
-  "commit_template": "- #{{TITLE}} ([`#{{SHORT_MERGE_SHA}}`](https://github.com/${{ github.repository }}/commit/#{{MERGE_SHA}}))",
-  "custom_placeholders": [
-    {
-      "name": "SHORT_MERGE_SHA",
-      "source": "MERGE_SHA",
-      "transformer": {
-        "pattern": "(.*){7}(.*)?",
-        "target": "- $1"
-      }
-    }
-  ],
+  "commit_template": "- #{{TITLE}} (#{{MERGE_SHA}})",
   "empty_template": "- no changes"
 }
