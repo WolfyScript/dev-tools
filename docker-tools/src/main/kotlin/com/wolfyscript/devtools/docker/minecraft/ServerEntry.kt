@@ -27,6 +27,9 @@ abstract class ServerEntry {
     abstract val libName: Property<String>
 
     @get:Optional
+    abstract val destFileName: Property<String>
+
+    @get:Optional
     abstract val libDir: DirectoryProperty
 
     @get:Optional
