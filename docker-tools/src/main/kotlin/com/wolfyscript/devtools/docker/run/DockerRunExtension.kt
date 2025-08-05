@@ -1,32 +1,38 @@
 package com.wolfyscript.devtools.docker.run
 
+import org.gradle.api.Project
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
+import org.gradle.kotlin.dsl.listProperty
+import org.gradle.kotlin.dsl.mapProperty
+import org.gradle.kotlin.dsl.property
+import org.gradle.kotlin.dsl.setProperty
 
-abstract class DockerRunExtension {
+abstract class DockerRunExtension(objects: ObjectFactory, project: Project) {
 
     /**
      * The name of the container
      */
     @get:Input
-    abstract val name: Property<String>
+    val name: Property<String> = objects.property<String>()
 
     /**
      * The image of the container
      */
     @get:Input
-    abstract val image: Property<String>
+    val image: Property<String> = objects.property<String>()
 
     /**
      * The network to add the container to
      */
     @get:Input
     @get:Optional
-    abstract val network: Property<String>
+    val network: Property<String> = objects.property<String>()
 
     /**
      * Specifies if the container should be run as a daemon
@@ -34,7 +40,7 @@ abstract class DockerRunExtension {
      */
     @get:Input
     @get:Optional
-    abstract val daemonize: Property<Boolean>
+    val daemonize: Property<Boolean> = objects.property<Boolean>().convention(true)
 
     /**
      * Specifies if the container should be removed when stopped.
@@ -43,31 +49,31 @@ abstract class DockerRunExtension {
      */
     @get:Input
     @get:Optional
-    abstract val clean: Property<Boolean>
+    val clean: Property<Boolean> = objects.property<Boolean>().convention(true)
 
     @get:Input
     @get:Optional
-    abstract val ignoreExitValue: Property<Boolean>
+    val ignoreExitValue: Property<Boolean> = objects.property<Boolean>().convention(true)
 
     @get:Input
     @get:Optional
-    abstract val command: ListProperty<String>
+    val command: ListProperty<String> = objects.listProperty<String>()
 
     @get:Input
     @get:Optional
-    abstract val env: MapProperty<String, String>
+    val env: MapProperty<String, String> = objects.mapProperty<String, String>()
 
-    abstract val ports: SetProperty<String>
+    val ports: SetProperty<String> = objects.setProperty<String>()
 
-    abstract val arguments: ListProperty<String>
+    val arguments: ListProperty<String> = objects.listProperty<String>()
 
     /**
      * Volume mappings and bindings of the container
      */
-    abstract val volumes: MapProperty<Any, String>
+    val volumes: MapProperty<Any, String> = objects.mapProperty<Any, String>().empty()
 
     fun arguments(vararg arguments: String) {
-        this.arguments.set(listOf(elements = arguments))
+        this.arguments.addAll(*arguments)
     }
 
     /**
@@ -80,7 +86,7 @@ abstract class DockerRunExtension {
      * @param ports List of port mappings
      */
     fun ports(vararg ports: String) {
-        this.ports.set(buildSet {
+        this.ports.addAll(buildSet {
             for (port in ports) {
                 val mapping = port.split(":", limit = 2)
                 if (mapping.size == 1) {
@@ -102,11 +108,11 @@ abstract class DockerRunExtension {
     }
 
     fun volumes(volumes: Map<Any, String>) {
-        this.volumes.set(volumes.toMap())
+        this.volumes.putAll(volumes)
     }
 
     fun env(env: Map<String, String>) {
-        this.env.set(env.toMap())
+        this.env.putAll(env)
     }
 
 }
