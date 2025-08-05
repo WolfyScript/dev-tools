@@ -11,18 +11,18 @@ The plugins are published to a private repository that you need to add to the pl
 > }
 > ```
 
-### Docker Run Gradle Plugin
-Inspired by docker-run module in [palantir/gradle-docker](https://github.com/palantir/gradle-docker), 
-but with a slightly different behaviour.  
-It allows you to create custom independent tasks with different configurations instead of just having a single configuration available.  
-One extension that can be used to specify default values for all custom tasks.
+# Docker Run Gradle Plugin
+Inspired by docker-run module in [palantir/gradle-docker](https://github.com/palantir/gradle-docker), but with a slightly different behaviour.  
 
 Add the plugin dependency to the `build.gradle.kts`
 ```kotlin
 plugins {
-    id("com.wolfyscript.devtools.docker.run") version ("a2.0.0.2")
+    id("com.wolfyscript.devtools.docker.run") version ("a2.1.0.0")
 }
 ```
+
+## Default Behaviour
+The plugin provides an extension `dockerRun` and 3 tasks (`dockerRun`, `dockerStatus`, and `dockerStop`). 
 
 Use the extension to configure the container to run, or specify defaults for custom tasks
 ```kotlin
@@ -39,30 +39,37 @@ dockerRun {
     arguments.set(setOf("-it")) // Allow for console interactivity with 'docker attach'
 }
 ```
+The tasks can then be used to either run, stop, or get the status of the associated container.
 
-#### Creating custom tasks 
-Simply create a new task of the given type.  
-Then apply the defaults if necessary, or not to create an independent task.
+## Custom Behaviour
+This plugin allows you to create custom independent tasks and configure them independently of each other.  
+You can also create custom extensions that can be used to specify default values for your custom tasks.  
+This makes it possible to run multiple different containers.  
+
+### Creating custom tasks 
+Create custom run, stop, or status tasks.    
+The `applyExtension` allows to easily apply defaults that are specified in the given `DockerRunExtension`. 
+If not used, the task is completely independent.
 ```kotlin
 target.task<DockerStopTask>("container_stop") {
-    applyExtension(extensions.getByName<DockerRunExtension>("dockerRun")) // Apply defaults
+    applyExtension(extensions.getByName<DockerRunExtension>("dockerRun")) // Apply defaults as conventions
     name.set("${name.get()}_$serverName") // overrides default
 }
 
 target.task<DockerRunTask>("container_run") {
-    applyExtension(extensions.getByName<DockerRunExtension>("dockerRun")) // Apply defaults
+    applyExtension(extensions.getByName<DockerRunExtension>("dockerRun")) // Apply defaults as conventions
     name.set("${name.get()}_$serverName") // overrides default
 }
 ```
 
-#### Use custom extensions
+### Use custom extensions
 ```kotlin
 val defaultCustomExt = target.extensions.create<DockerRunExtension>("customDockerRun").apply {
     // Configuration 
 }
 
 target.task<DockerStopTask>("container_stop") {
-    applyExtension(defaultCustomExt) // Apply defaults
+    applyExtension(defaultCustomExt) // Apply defaults as conventions
 }
 
 target.task<DockerRunTask>("container_run") {
@@ -71,8 +78,8 @@ target.task<DockerRunTask>("container_run") {
 
 ```
 
-### Minecraft Servers Gradle Plugin
-This plugin uses the docker run plugin to run minecraft servers via gradle tasks inside of docker containers.
+# Minecraft Servers Gradle Plugin
+This plugin uses the docker run plugin to simplify running minecraft servers via Gradle tasks inside docker containers.
 It uses the [itzg/minecraft-server](https://github.com/itzg/docker-minecraft-server) image, and can be freely configured for different server types.
 
 Add the plugin dependency to the `build.gradle.kts`
@@ -81,26 +88,67 @@ plugins {
     id("com.wolfyscript.devtools.docker.minecraft_servers") version ("2.0-SNAPSHOT")
 }
 ```
-The plugin can then be configured using the `minecraftServers` extension.
+## Configuring Servers
+The servers can then be configured using the `minecraftServers` extension.   
 Some properties like the `serversDir`, `libName`, `libDir` are used as defaults for the specified servers in `servers`.
 
-Each server entry in `servers` needs a unique name, that is used for the directory, container, and task.  
-A custom directory can be specified via `serverDir`, that will be used instead of the default one.  
-The same applies to `libName` and `libDir`, which also override the defaults.  
-`version` = the minecraft version of the server  (See [image docs](https://docker-minecraft-server.readthedocs.io/en/latest/versions/minecraft/))  
-`type` = the type of the server (See [image docs](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/))  
-`ports` = a list of ports to publish and map from container to host 
+All server data is stored within the specified host `serversDir` directory. The default directory is the project directory. 
+
+Each server entry in `servers` needs to be registered under a unique name, and is then stored within a subdirectory of the same name.
+The property defaults from the `minecraftServers` extension may be overridden by each server seperately. 
+
+`version`: the minecraft version of the server  (See [image docs](https://docker-minecraft-server.readthedocs.io/en/latest/versions/minecraft/))  
+`type`: the type of the server (See [image docs](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/))  
+`ports`: a list of ports to publish and map from container to host 
 
 ```kotlin
 minecraftServers {
     serversDir.set(file("./test_servers"))
     libName.set("${project.name}-${version}.jar")
     servers {
-        register("spigot_1_17") {
-            version.set("1.17.1")
+        register("spigot") {
+            version.set("1.21.6")
             type.set("SPIGOT")
-            ports.set(setOf("25565"))
+            ports.add("25565") 
+            destFileName.set("scafall.jar") // set a name for the copied app
+            imageVersion.set("java21") // Use a different version of the docker image
         }
     }
 }
 ```
+
+## Configuring Minecraft Docker
+The plugin also provides the `minecraftDockerRun` that allows configuring the docker containers itself.
+
+Here is an example from scafall:
+The main purpose here is to have the duplicated code in a buildSrc plugin. Including a debugger connection, resource limits, and other defaults.
+```kotlin
+val debugPort: String = System.getenv("debugPort") ?: "5006"
+val debugPortMapping = "${debugPort}:${debugPort}"
+
+minecraftDockerRun {
+    // By default, the container is removed when stopped. 
+    // That makes it impossible to know why a container may fail to start.
+    // In that case disable it to debug and delete the container manually.
+    // clean.set(false)
+    env.putAll(
+        mapOf(
+            // Limit each container memory
+            "MEMORY" to "2G",
+            // Allows attaching the IntelliJ Debugger
+            "JVM_OPTS" to "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:${debugPort}",
+            "FORCE_REDOWNLOAD" to "false"
+        )
+    )
+    arguments(
+        // Constrain to only use 2 cpus to better align with real production servers 
+        "--cpus",
+        "2",
+        // allow console interactivity (docker attach)
+        "-it"
+    )
+    ports.set(listOf(debugPortMapping))
+}
+```
+
+
