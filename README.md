@@ -1,18 +1,19 @@
 ## Dev-Tools
 ### Repository
-The plugins are published to a private repository that you need to add to the plugin repositories.
-> **settings.gradle.kts** 
-> ```kotlin
-> pluginManagement {
->     repositories {
->         maven("https://artifacts.wolfyscript.com/artifactory/gradle-dev")
->         // ... (other repos)
->     }
-> }
-> ```
+The plugins are published to a private repository that you need to add to the plugin repositories.  
+
+**settings.gradle.kts** 
+```kotlin
+pluginManagement {
+    repositories {
+        maven("https://artifacts.wolfyscript.com/artifactory/gradle-dev")
+        // ... (other repos)
+    }
+}
+```
 
 # Docker Run Gradle Plugin
-Inspired by docker-run module in [palantir/gradle-docker](https://github.com/palantir/gradle-docker), but with a slightly different behaviour.  
+This plugin simplifies running docker containers using Gradle and compose custom setups.
 
 Add the plugin dependency to the `build.gradle.kts`
 ```kotlin
@@ -20,11 +21,18 @@ plugins {
     id("com.wolfyscript.devtools.docker.run") version ("a2.1.0.0")
 }
 ```
+> [!note]
+> 
+> The plugin has only been tested on **Linux** using a local **Docker Engine** install.
+> The plugin runs all the docker commands on the command line provided by Gradle.
+> It is unknown how well it functions on Windows and/or Docker Desktop.
+> 
+
 
 ## Default Behaviour
 The plugin provides an extension `dockerRun` and 3 tasks (`dockerRun`, `dockerStatus`, and `dockerStop`). 
 
-Use the extension to configure the container to run, or specify defaults for custom tasks
+Use the extension to configure the container to run or specify defaults for custom tasks
 ```kotlin
 dockerRun {
     name.set("test_minecraft_server")
