@@ -64,17 +64,17 @@ abstract class DockerRunTask : DefaultTask() {
     }
 
     fun applyExtension(extension: DockerRunExtension) {
-        this.name.set(extension.name)
-        this.image.set(extension.image)
-        if (extension.network.isPresent) network.set(extension.network)
-        if (extension.command.isPresent) command.set(extension.command)
-        if (extension.daemonize.isPresent) daemonize.set(extension.daemonize)
-        if (extension.clean.isPresent) clean.set(extension.clean)
-        if (extension.ignoreExitValue.isPresent) ignoreExitValue.set(extension.ignoreExitValue)
-        if (extension.ports.isPresent) ports.set(extension.ports)
-        if (extension.env.isPresent) env.set(extension.env)
-        if (extension.arguments.isPresent) arguments.set(extension.arguments)
-        if (extension.volumes.isPresent) volumes.set(extension.volumes)
+        name.convention(extension.name)
+        image.convention(extension.image)
+        network.convention(extension.network)
+        command.convention(extension.command)
+        daemonize.convention(extension.daemonize)
+        clean.convention(extension.clean)
+        ignoreExitValue.convention(extension.ignoreExitValue)
+        ports.convention(extension.ports)
+        env.convention(extension.env)
+        arguments.convention(extension.arguments)
+        volumes.convention(extension.volumes)
     }
 
     @TaskAction

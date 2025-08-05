@@ -15,8 +15,8 @@ abstract class DockerStopTask: DefaultTask() {
     val ignoreExitValue: Property<Boolean> = project.objects.property<Boolean>().convention(true)
 
     fun applyExtension(extension: DockerRunExtension) {
-        this.name.set(extension.name)
-        if (extension.ignoreExitValue.isPresent) ignoreExitValue.set(extension.ignoreExitValue)
+        name.convention(extension.name)
+        ignoreExitValue.convention(extension.ignoreExitValue)
     }
 
     @TaskAction
