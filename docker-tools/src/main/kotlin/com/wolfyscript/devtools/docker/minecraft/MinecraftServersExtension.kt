@@ -22,7 +22,7 @@ abstract class MinecraftServersExtension(objects: ObjectFactory, project: Projec
 
     init {
         servers.all {
-            serverDir.convention(serversDir)
+            serverDir.convention(serversDir.dir(name))
             libDir.convention(this@MinecraftServersExtension.libDir)
             libName.convention(this@MinecraftServersExtension.libName)
             destFileName.convention("${project.name}.jar")
