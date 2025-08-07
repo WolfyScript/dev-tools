@@ -18,7 +18,7 @@ This plugin simplifies running docker containers using Gradle and compose custom
 Add the plugin dependency to the `build.gradle.kts`
 ```kotlin
 plugins {
-    id("com.wolfyscript.devtools.docker.run") version ("a2.1.0.0")
+    id("com.wolfyscript.devtools.docker.run") version ("a2.1.0.1")
 }
 ```
 > [!note]
@@ -93,7 +93,7 @@ It uses the [itzg/minecraft-server](https://github.com/itzg/docker-minecraft-ser
 Add the plugin dependency to the `build.gradle.kts`
 ```kotlin
 plugins {
-    id("com.wolfyscript.devtools.docker.minecraft_servers") version ("2.0-SNAPSHOT")
+    id("com.wolfyscript.devtools.docker.minecraft_servers") version ("a2.1.0.1")
 }
 ```
 ## Configuring Servers
