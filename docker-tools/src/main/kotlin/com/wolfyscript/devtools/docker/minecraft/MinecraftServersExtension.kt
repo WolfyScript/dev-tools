@@ -26,6 +26,7 @@ abstract class MinecraftServersExtension(objects: ObjectFactory, project: Projec
             libDir.convention(this@MinecraftServersExtension.libDir)
             libName.convention(this@MinecraftServersExtension.libName)
             destFileName.convention("${project.name}.jar")
+            destPath.convention("plugins")
         }
         servers.all {
             val serverPath: String = serverDir.get().asFile.path
@@ -41,10 +42,10 @@ abstract class MinecraftServersExtension(objects: ObjectFactory, project: Projec
                 }
 
                 val file: RegularFile = libDir.get().file(libName.get())
-                println("copy: ${file.asFile.path} to server $serverPath/plugins")
+                println("copy: ${file.asFile.path} to server $serverPath/${destPath.get()}/")
                 from(file)
                 rename(".*", destFileName.get())
-                into("$serverPath/plugins")
+                into("$serverPath/${destPath.get()}/")
             }
 
             val stopTask = project.tasks.register<DockerStopTask>("${name}_stop") {
