@@ -1,11 +1,11 @@
 import org.jfrog.gradle.plugin.artifactory.Constant.ALL_PUBLICATIONS
 
 plugins {
-    kotlin("jvm") version "1.9.0"
+    kotlin("jvm") version "2.2.0"
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version ("8.1.1")
+    id("com.gradleup.shadow") version ("9.0.0")
     id("com.wolfyscript.devtools.java-conventions")
     id("com.jfrog.artifactory")
 }
@@ -26,7 +26,7 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 artifactory {

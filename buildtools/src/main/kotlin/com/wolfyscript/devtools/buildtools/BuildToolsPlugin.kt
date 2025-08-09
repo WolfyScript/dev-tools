@@ -13,12 +13,12 @@ class BuildToolsPlugin : Plugin<Project> {
             buildToolsJar.convention(target.objects.fileProperty().convention(buildToolsDir.file("BuildTools.jar")))
         }
 
-        target.tasks.create<BuildToolsUpdateTask>("prepareBuildTools") {
+        target.tasks.register("prepareBuildTools", BuildToolsUpdateTask::class.java) {
             buildToolsJar.convention(extension.buildToolsJar)
             buildToolsDir.convention(extension.buildToolsDir)
         }
 
-        target.tasks.create<BuildToolsInstallTask>("prepareNMS") {
+        target.tasks.register("prepareNMS", BuildToolsInstallTask::class.java) {
             buildToolsDir.convention(extension.buildToolsDir)
             buildToolsJar.convention(extension.buildToolsJar)
             minecraftVersion.convention(extension.minecraftVersion)

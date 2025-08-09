@@ -33,7 +33,7 @@ abstract class BuildToolsUpdateTask : DefaultTask() {
     val buildToolsDir: DirectoryProperty = this.project.objects.directoryProperty().convention(this.project.layout.projectDirectory.dir("buildtools"))
 
     @TaskAction
-    private fun update() {
+    fun update() {
         // Check for existing buildtools
         val buildToolsJar: File = buildToolsJar.get().asFile
         val dir = buildToolsDir.get().asFile

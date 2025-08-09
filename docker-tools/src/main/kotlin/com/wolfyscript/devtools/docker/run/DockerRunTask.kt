@@ -15,8 +15,10 @@ import org.gradle.kotlin.dsl.mapProperty
 import org.gradle.kotlin.dsl.property
 import org.gradle.kotlin.dsl.setProperty
 import org.gradle.kotlin.dsl.support.serviceOf
+import org.gradle.process.ExecOperations
+import javax.inject.Inject
 
-abstract class DockerRunTask : DefaultTask() {
+abstract class DockerRunTask @Inject constructor(private var execOperations: ExecOperations): DefaultTask() {
 
     @get:Input
     val name: Property<String> = project.objects.property<String>()
@@ -124,7 +126,8 @@ abstract class DockerRunTask : DefaultTask() {
         }
 
         println(args)
-        project.exec {
+
+        execOperations.exec {
             commandLine(args)
         }
     }

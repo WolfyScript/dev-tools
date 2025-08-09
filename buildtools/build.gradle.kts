@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.0"
+    kotlin("jvm") version "2.2.0"
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
@@ -23,7 +23,7 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 gradlePlugin {
