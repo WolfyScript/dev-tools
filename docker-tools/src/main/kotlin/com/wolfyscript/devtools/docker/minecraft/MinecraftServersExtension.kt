@@ -50,6 +50,7 @@ abstract class MinecraftServersExtension(objects: ObjectFactory, project: Projec
 
             val stopTask = project.tasks.register<DockerStopTask>("${name}_stop") {
                 group = Constants.TASK_MINECRAFT_RUN_GROUP_NAME
+                applyExtension(runExtension)
 
                 name.convention("${runExtension.name.get()}_${this@all.name}")
             }

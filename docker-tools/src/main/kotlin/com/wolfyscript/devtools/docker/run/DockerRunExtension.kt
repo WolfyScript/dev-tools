@@ -56,6 +56,7 @@ abstract class DockerRunExtension(objects: ObjectFactory, project: Project) {
     val ignoreExitValue: Property<Boolean> = objects.property<Boolean>().convention(true)
 
     @get:Input
+    @get:Optional
     val platform: Property<ContainerPlatform> = project.objects.property<ContainerPlatform>().convention(ContainerPlatform.DOCKER)
 
     @get:Input
