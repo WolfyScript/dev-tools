@@ -22,7 +22,7 @@ class MinecraftServersPlugin : Plugin<Project> {
             target
         ).apply {
             name.convention("test_mc_server")
-            image.convention("itzg/minecraft-server")
+            image.convention("docker.io/itzg/minecraft-server")
             env.convention(buildMap {
                 this["EULA"] = "TRUE" // Enable by default. setting it to false makes no sense
                 this["USE_AIKAR_FLAGS"] = "TRUE" // Recommended, so gonna enable it by default
