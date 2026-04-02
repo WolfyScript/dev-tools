@@ -40,6 +40,9 @@ abstract class DockerRunTask @Inject constructor(private var execOperations: Exe
     val ignoreExitValue: Property<Boolean> = project.objects.property<Boolean>().convention(true)
 
     @get:Input
+    val platform: Property<ContainerPlatform> = project.objects.property<ContainerPlatform>().convention(ContainerPlatform.DOCKER)
+
+    @get:Input
     @get:Optional
     val command: ListProperty<String> = project.objects.listProperty<String>()
 
@@ -69,6 +72,7 @@ abstract class DockerRunTask @Inject constructor(private var execOperations: Exe
         name.convention(extension.name)
         image.convention(extension.image)
         network.convention(extension.network)
+        platform.convention(extension.platform)
         command.convention(extension.command)
         daemonize.convention(extension.daemonize)
         clean.convention(extension.clean)
@@ -81,7 +85,7 @@ abstract class DockerRunTask @Inject constructor(private var execOperations: Exe
 
     @TaskAction
     fun runDockerContainer() {
-        val args = mutableListOf("docker", "run")
+        val args = mutableListOf(platform.get().command, "run")
         if (daemonize.getOrElse(true)) {
             args.add("-d")
         }

@@ -11,6 +11,9 @@ import javax.inject.Inject
 abstract class DockerStopTask @Inject constructor(private var execOperations: ExecOperations): DefaultTask() {
 
     @get:Input
+    val platform: Property<ContainerPlatform> = project.objects.property<ContainerPlatform>().convention(ContainerPlatform.DOCKER)
+
+    @get:Input
     val name: Property<String> = project.objects.property<String>()
 
     @get:Input
@@ -18,12 +21,13 @@ abstract class DockerStopTask @Inject constructor(private var execOperations: Ex
 
     fun applyExtension(extension: DockerRunExtension) {
         name.convention(extension.name)
+        platform.convention(extension.platform)
         ignoreExitValue.convention(extension.ignoreExitValue)
     }
 
     @TaskAction
     fun stopDockerContainer() {
-        val args = listOf("docker", "stop", name.get())
+        val args = listOf(platform.get().command, "stop", name.get())
 
         execOperations.exec {
             isIgnoreExitValue = ignoreExitValue.getOrElse(true)
